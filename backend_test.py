@@ -134,7 +134,66 @@ class PodcastJournalAPITester:
         }
         success2 = self.run_test("Update Day 2", "PUT", f"groups/{self.created_group_id}/day", 200, day2_data)
         
-        return success1 and success2
+        # Test Day 3 update (NEW - Grammar checklist and vocabulary)
+        day3_data = {
+            "day": 3,
+            "data": {
+                "introduction": "Hook your audience with this intro",
+                "development": "Main content development",
+                "conclusion": "Call to action conclusion",
+                "grammar_present_perfect": True,
+                "grammar_comparatives": True,
+                "grammar_connectors": False,
+                "grammar_passive_voice": True,
+                "key_vocabulary": "climate, environment, sustainability, pollution, renewable",
+                "vocabulary_definitions": "Climate: weather conditions, Environment: surroundings",
+                "language_style": "Formal and persuasive",
+                "completed": False
+            }
+        }
+        success3 = self.run_test("Update Day 3 (Grammar & Vocabulary)", "PUT", f"groups/{self.created_group_id}/day", 200, day3_data)
+        
+        # Test Day 4 update (NEW - Script and visual planning)
+        day4_data = {
+            "day": 4,
+            "data": {
+                "draft_script": "[INTRO] Welcome to our podcast about climate change...",
+                "visual_sketch": "Scene 1: Studio setup with microphones, Scene 2: Interview setup",
+                "estimated_duration": "4 minutes 30 seconds",
+                "completed": False
+            }
+        }
+        success4 = self.run_test("Update Day 4 (Script & Visual)", "PUT", f"groups/{self.created_group_id}/day", 200, day4_data)
+        
+        # Test Day 5 update (NEW - Production)
+        day5_data = {
+            "day": 5,
+            "data": {
+                "rehearsal_notes": "Need to work on timing and transitions",
+                "production_tools": "Audacity, GarageBand",
+                "recording_date": "January 15, 2025",
+                "final_script": "[FINAL] Welcome to our podcast...",
+                "media_link": "https://youtube.com/watch?v=test123",
+                "completed": False
+            }
+        }
+        success5 = self.run_test("Update Day 5 (Production)", "PUT", f"groups/{self.created_group_id}/day", 200, day5_data)
+        
+        # Test Day 6 update (NEW - Reflection)
+        day6_data = {
+            "day": 6,
+            "data": {
+                "what_learned": "Learned about climate change and podcast production",
+                "challenges_faced": "Timing was difficult, technical issues with recording",
+                "team_collaboration": "Good teamwork, everyone contributed equally",
+                "what_would_change": "Would plan better timing and have backup equipment",
+                "overall_experience": "Very positive, would recommend to others",
+                "completed": True
+            }
+        }
+        success6 = self.run_test("Update Day 6 (Reflection)", "PUT", f"groups/{self.created_group_id}/day", 200, day6_data)
+        
+        return success1 and success2 and success3 and success4 and success5 and success6
 
     def test_update_invalid_day(self):
         """Test updating with invalid day number"""
