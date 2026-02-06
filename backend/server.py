@@ -138,7 +138,7 @@ async def update_day(group_id: str, request: DayUpdateRequest):
     
     day_key = f"day{request.day}"
     if day_key not in ["day1", "day2", "day3", "day4", "day5"]:
-        raise HTTPException(status_code=400, detail="Día inválido")
+        raise HTTPException(status_code=400, detail="Invalid day")
     
     update_data = {
         f"{day_key}": request.data,
