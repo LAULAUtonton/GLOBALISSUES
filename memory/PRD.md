@@ -53,12 +53,12 @@ Create an online journal project for podcast/video log students project for 3rd 
 ## Day Workflow Structure (6 Days)
 | Day | Title | Fields |
 |-----|-------|--------|
-| 1 | Planning | Topic, Alternatives, Why this topic, What to communicate |
-| 2 | Research | Sources, Learnings, Target audience |
-| 3 | Language & Structure | **Grammar Checklist** (Present Perfect, Comparatives, Connectors, Passive Voice), Introduction, Development, Conclusion, **Key Vocabulary (min 10 words)**, Definitions, Language style |
-| 4 | Script & Visual | **Script Template** (Podcast/Vlog examples), Draft script, **Visual sketch/storyboard**, Estimated duration (3-5 min) |
-| 5 | Production | **Rehearsal notes**, **Production tools used**, Recording date, Final script, Media link |
-| 6 | Reflection | What learned, Challenges faced, Team collaboration, What would change, Overall experience |
+| 1 | Planning | Topic (from Unit 3 Global Issues), Why important, Main message + Checklist |
+| 2 | Research | Sources (min 2), Key Facts (3-5), Target audience + Checklist |
+| 3 | Language | **Unit 3 Grammar Checklist** (Second Conditional, Indefinite Pronouns, Compound Nouns), **Unit 3 Vocabulary** (min 5 words: carbon footprint, climate change, etc.), Structure (Intro/Dev/Conclusion) |
+| 4 | Script | **Complete Example Script** (Climate Change podcast), **Simplified Template** to copy, Duration (3-4 min) + Checklist |
+| 5 | Production | Rehearsal notes, Tools used, **Media link submission** + Checklist |
+| 6 | Reflection | What learned, Challenges, Teamwork, Experience rating |
 
 ## Prioritized Backlog
 
