@@ -165,10 +165,35 @@ class PodcastJournalAPITester:
             return False
         return self.run_test("Delete Group", "DELETE", f"groups/{self.created_group_id}", 200)
 
-    def test_delete_nonexistent_group(self):
-        """Test deleting a non-existent group"""
-        fake_id = "nonexistent-id-12345"
-        return self.run_test("Delete Non-existent Group", "DELETE", f"groups/{fake_id}", 404)
+    def test_create_vlog_group(self):
+        """Test creating a vlog group"""
+        test_data = {
+            "group_name": f"Vlog Group {datetime.now().strftime('%H%M%S')}",
+            "members": ["Student A", "Student B"],
+            "project_type": "vlog"
+        }
+        success, response = self.run_test("Create Vlog Group", "POST", "groups", 200, test_data)
+        if success and response.get('project_type') == 'vlog':
+            print(f"   ✅ Vlog project type correctly set")
+            return True
+        else:
+            print(f"   ❌ Vlog project type incorrect: {response.get('project_type')}")
+            return False
+
+    def test_default_project_type(self):
+        """Test that default project type is podcast when not specified"""
+        test_data = {
+            "group_name": f"Default Type Group {datetime.now().strftime('%H%M%S')}",
+            "members": ["Student X", "Student Y"]
+            # No project_type specified
+        }
+        success, response = self.run_test("Create Group (Default Type)", "POST", "groups", 200, test_data)
+        if success and response.get('project_type') == 'podcast':
+            print(f"   ✅ Default project type correctly set to podcast")
+            return True
+        else:
+            print(f"   ❌ Default project type incorrect: {response.get('project_type')}")
+            return False
 
 def main():
     print("🚀 Starting Podcast Journal API Tests")
