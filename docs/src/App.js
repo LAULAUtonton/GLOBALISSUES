@@ -4,10 +4,8 @@ function Home() {
   return (
     <div style={{ padding: 24 }}>
       <h1>GLOBALISSUES</h1>
-      <p>Choose a section:</p>
-      <ul>
-        <li><Link to="/instructions">Instructions</Link></li>
-      </ul>
+      <p>This is the homepage.</p>
+      <Link to="/instructions">Go to instructions</Link>
     </div>
   );
 }
@@ -16,8 +14,7 @@ function Instructions() {
   return (
     <div style={{ padding: 24 }}>
       <h2>Here are your Instructions</h2>
-      <p>Add your real instructions here.</p>
-      <p><Link to="/">Back</Link></p>
+      <Link to="/">Back home</Link>
     </div>
   );
 }
@@ -27,9 +24,8 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/instructions" element={<Instructions />} />
-
-      {/* IMPORTANT: fallback so it never goes blank */}
       <Route path="*" element={<Home />} />
     </Routes>
   );
 }
+
