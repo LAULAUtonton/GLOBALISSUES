@@ -1,6 +1,7 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "0.1.0"
+  "homepage": "https://laulautonton.github.io/GLOBALISSUES",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
