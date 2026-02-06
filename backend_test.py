@@ -195,6 +195,18 @@ class PodcastJournalAPITester:
             print(f"   ❌ Default project type incorrect: {response.get('project_type')}")
             return False
 
+    def test_delete_group(self):
+        """Test deleting a group"""
+        if not self.created_group_id:
+            print("❌ No group ID available for testing")
+            return False
+        return self.run_test("Delete Group", "DELETE", f"groups/{self.created_group_id}", 200)
+
+    def test_delete_nonexistent_group(self):
+        """Test deleting a non-existent group"""
+        fake_id = "nonexistent-id-12345"
+        return self.run_test("Delete Non-existent Group", "DELETE", f"groups/{fake_id}", 404)
+
 def main():
     print("🚀 Starting Podcast Journal API Tests")
     print("=" * 50)
