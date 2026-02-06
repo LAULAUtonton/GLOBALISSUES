@@ -1,8 +1,8 @@
 function App() {
   return (
-    <div style={{ padding: "40px", fontSize: "24px" }}>
+    <div style={{ padding: 40 }}>
       <h1>Global Issues</h1>
-      <p>The app is working 🎉</p>
+      <p>If you see this, routing is fixed 🎉</p>
     </div>
   );
 }
