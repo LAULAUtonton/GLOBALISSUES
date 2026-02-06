@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Mic, Video, Users, BookOpen, Target, Search, MessageSquare, FileText, CheckCircle, Lock, Trash2, Eye, ChevronRight, PenTool, Sparkles, Globe } from "lucide-react";
+import { Mic, Video, Users, BookOpen, Target, Search, MessageSquare, FileText, CheckCircle, Lock, Trash2, Eye, ChevronRight, PenTool, Sparkles, Globe, Play, RefreshCw, CheckSquare, Square } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -67,7 +67,7 @@ const Landing = () => {
             Global Issues:<br/>Making a Difference
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto" style={{fontFamily: 'Manrope, sans-serif'}}>
-            Create your podcast or video log step by step. 5 days, 5 levels. Complete your mission!
+            Create your podcast or video log step by step. 6 days, 6 levels. Complete your mission!
           </p>
         </header>
 
@@ -201,7 +201,7 @@ const Landing = () => {
             </h2>
             <div className="grid gap-4">
               {groups.map(g => {
-                const completed = [g.day1?.completed, g.day2?.completed, g.day3?.completed, g.day4?.completed, g.day5?.completed].filter(Boolean).length;
+                const completed = [g.day1?.completed, g.day2?.completed, g.day3?.completed, g.day4?.completed, g.day5?.completed, g.day6?.completed].filter(Boolean).length;
                 const isPodcast = g.project_type === 'podcast' || !g.project_type;
                 return (
                   <button
@@ -219,7 +219,7 @@ const Landing = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="bg-[#A3E635] border-2 border-black px-3 py-1 font-bold text-sm">
-                        {completed}/5
+                        {completed}/6
                       </div>
                       <ChevronRight className="w-5 h-5" />
                     </div>
@@ -233,6 +233,20 @@ const Landing = () => {
     </div>
   );
 };
+
+// ============ CHECKBOX COMPONENT ============
+const Checkbox = ({ checked, onChange, label }) => (
+  <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-gray-50 border-2 border-black mb-2">
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className={`w-6 h-6 border-2 border-black flex items-center justify-center ${checked ? 'bg-[#A3E635]' : 'bg-white'}`}
+    >
+      {checked && <CheckSquare className="w-5 h-5" />}
+    </button>
+    <span className="text-sm">{label}</span>
+  </label>
+);
 
 // ============ PROJECT PAGE (SURVEY) ============
 const ProjectPage = () => {
@@ -251,10 +265,9 @@ const ProjectPage = () => {
     try {
       const res = await axios.get(`${API}/groups/${groupId}`);
       setGroup(res.data);
-      // Find first incomplete day
-      const days = [res.data.day1, res.data.day2, res.data.day3, res.data.day4, res.data.day5];
+      const days = [res.data.day1, res.data.day2, res.data.day3, res.data.day4, res.data.day5, res.data.day6];
       const firstIncomplete = days.findIndex(d => !d?.completed);
-      setActiveDay(firstIncomplete === -1 ? 5 : firstIncomplete + 1);
+      setActiveDay(firstIncomplete === -1 ? 6 : firstIncomplete + 1);
     } catch (e) {
       console.error(e);
       navigate('/');
@@ -299,7 +312,7 @@ const ProjectPage = () => {
         ...prev,
         [`day${day}`]: dayData
       }));
-      if (day < 5) setActiveDay(day + 1);
+      if (day < 6) setActiveDay(day + 1);
     } catch (e) {
       console.error(e);
     }
@@ -314,9 +327,10 @@ const ProjectPage = () => {
   const days = [
     { num: 1, title: "Planning", icon: Target, color: "#8B5CF6" },
     { num: 2, title: "Research", icon: Search, color: "#F472B6" },
-    { num: 3, title: "Structure", icon: MessageSquare, color: "#06B6D4" },
-    { num: 4, title: "Draft", icon: PenTool, color: "#F59E0B" },
-    { num: 5, title: "Final", icon: isPodcast ? Mic : Video, color: "#A3E635" },
+    { num: 3, title: "Language", icon: BookOpen, color: "#06B6D4" },
+    { num: 4, title: "Script", icon: PenTool, color: "#F59E0B" },
+    { num: 5, title: "Production", icon: Play, color: "#10B981" },
+    { num: 6, title: "Reflection", icon: RefreshCw, color: "#A3E635" },
   ];
 
   return (
@@ -378,7 +392,7 @@ const ProjectPage = () => {
           {/* Form Content */}
           <div className="md:col-span-9">
             <div className="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6">
-              {/* Day 1 */}
+              {/* Day 1 - Planning */}
               {activeDay === 1 && (
                 <div data-testid="day-1-form">
                   <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
@@ -393,7 +407,7 @@ const ProjectPage = () => {
                         value={group.day1?.topic || ""}
                         onChange={(e) => updateDay(1, 'topic', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                        placeholder="What global issue is your {projectLabel} about?"
+                        placeholder={`What global issue is your ${projectLabel} about?`}
                         data-testid="day1-topic"
                       />
                     </div>
@@ -431,7 +445,7 @@ const ProjectPage = () => {
                 </div>
               )}
 
-              {/* Day 2 */}
+              {/* Day 2 - Research */}
               {activeDay === 2 && (
                 <div data-testid="day-2-form">
                   <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
@@ -473,45 +487,98 @@ const ProjectPage = () => {
                 </div>
               )}
 
-              {/* Day 3 */}
+              {/* Day 3 - Language & Structure */}
               {activeDay === 3 && (
                 <div data-testid="day-3-form">
                   <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
-                    <MessageSquare className="w-6 h-6 text-[#06B6D4]" />
-                    Day 3: Message Structure
+                    <BookOpen className="w-6 h-6 text-[#06B6D4]" />
+                    Day 3: Language & Structure
                   </h2>
+                  
+                  {/* Grammar Checklist */}
+                  <div className="bg-blue-50 border-2 border-black p-4 mb-6">
+                    <h3 className="font-bold text-sm uppercase mb-3">📚 Unit 3 Grammar Checklist</h3>
+                    <p className="text-xs text-gray-600 mb-3">Check the grammar structures you will use in your {projectLabel}:</p>
+                    <Checkbox 
+                      checked={group.day3?.grammar_present_perfect || false}
+                      onChange={(v) => updateDay(3, 'grammar_present_perfect', v)}
+                      label="Present Perfect (have/has + past participle) - e.g., 'Climate change has affected...'"
+                    />
+                    <Checkbox 
+                      checked={group.day3?.grammar_comparatives || false}
+                      onChange={(v) => updateDay(3, 'grammar_comparatives', v)}
+                      label="Comparatives & Superlatives - e.g., 'more important than', 'the biggest problem'"
+                    />
+                    <Checkbox 
+                      checked={group.day3?.grammar_connectors || false}
+                      onChange={(v) => updateDay(3, 'grammar_connectors', v)}
+                      label="Connectors (however, therefore, although, because, furthermore)"
+                    />
+                    <Checkbox 
+                      checked={group.day3?.grammar_passive_voice || false}
+                      onChange={(v) => updateDay(3, 'grammar_passive_voice', v)}
+                      label="Passive Voice - e.g., 'Actions are being taken...', 'It was discovered that...'"
+                    />
+                  </div>
+
+                  {/* Message Structure */}
                   <div className="space-y-6">
-                    <div className="bg-gray-100 border-2 border-black p-4 mb-4">
-                      <p className="font-bold text-sm">📝 The 3 Parts of Your Message:</p>
+                    <div className="bg-gray-100 border-2 border-black p-4">
+                      <p className="font-bold text-sm">📝 Structure Your Message (3 Parts):</p>
                     </div>
                     <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">1️⃣ Introduction</label>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">1️⃣ Introduction (Hook your audience!)</label>
                       <textarea
-                        value={group.day3?.part1 || ""}
-                        onChange={(e) => updateDay(3, 'part1', e.target.value)}
+                        value={group.day3?.introduction || ""}
+                        onChange={(e) => updateDay(3, 'introduction', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[80px]"
-                        placeholder="How will you start? What hook will you use?"
-                        data-testid="day3-part1"
+                        placeholder="How will you start? A question? A shocking fact? A story?"
+                        data-testid="day3-intro"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">2️⃣ Development</label>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">2️⃣ Development (Main content)</label>
                       <textarea
-                        value={group.day3?.part2 || ""}
-                        onChange={(e) => updateDay(3, 'part2', e.target.value)}
+                        value={group.day3?.development || ""}
+                        onChange={(e) => updateDay(3, 'development', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[80px]"
-                        placeholder="Main points you will explain"
-                        data-testid="day3-part2"
+                        placeholder="Main points: What? Why? How? Examples?"
+                        data-testid="day3-dev"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">3️⃣ Conclusion</label>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">3️⃣ Conclusion (Call to action!)</label>
                       <textarea
-                        value={group.day3?.part3 || ""}
-                        onChange={(e) => updateDay(3, 'part3', e.target.value)}
+                        value={group.day3?.conclusion || ""}
+                        onChange={(e) => updateDay(3, 'conclusion', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[80px]"
-                        placeholder="How will you close? What do you want them to remember?"
-                        data-testid="day3-part3"
+                        placeholder="How will you end? What action do you want your audience to take?"
+                        data-testid="day3-conclusion"
+                      />
+                    </div>
+                    
+                    {/* Vocabulary */}
+                    <div className="bg-yellow-50 border-2 border-black p-4">
+                      <h3 className="font-bold text-sm uppercase mb-3">📖 Key Vocabulary (Minimum 10 words)</h3>
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">Key Words & Expressions</label>
+                      <textarea
+                        value={group.day3?.key_vocabulary || ""}
+                        onChange={(e) => updateDay(3, 'key_vocabulary', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="List at least 10 key words related to your topic..."
+                        data-testid="day3-vocab"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">Definitions (in English)</label>
+                      <textarea
+                        value={group.day3?.vocabulary_definitions || ""}
+                        onChange={(e) => updateDay(3, 'vocabulary_definitions', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="Write the definition of each key word in English..."
+                        data-testid="day3-definitions"
                       />
                     </div>
                     <div>
@@ -521,70 +588,211 @@ const ProjectPage = () => {
                         value={group.day3?.language_style || ""}
                         onChange={(e) => updateDay(3, 'language_style', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                        placeholder="Formal, informal, technical, friendly..."
-                        data-testid="day3-language"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📚 Key Vocabulary</label>
-                      <textarea
-                        value={group.day3?.key_vocabulary || ""}
-                        onChange={(e) => updateDay(3, 'key_vocabulary', e.target.value)}
-                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[80px]"
-                        placeholder="Important words you will use"
-                        data-testid="day3-vocabulary"
+                        placeholder="Formal, informal, persuasive, informative..."
+                        data-testid="day3-style"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Day 4 */}
+              {/* Day 4 - Script */}
               {activeDay === 4 && (
                 <div data-testid="day-4-form">
                   <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
                     <PenTool className="w-6 h-6 text-[#F59E0B]" />
-                    Day 4: First Draft
+                    Day 4: Script & Visual Plan
                   </h2>
-                  <div className="space-y-6">
-                    <div className="bg-yellow-100 border-2 border-black p-4 mb-4">
-                      <p className="font-bold text-sm">✏️ Write your first script. It doesn't have to be perfect!</p>
+                  
+                  {/* Script Template */}
+                  <div className="bg-orange-50 border-2 border-black p-4 mb-6">
+                    <h3 className="font-bold text-sm uppercase mb-2">📝 Script Template</h3>
+                    <div className="text-xs text-gray-700 font-mono bg-white p-3 border border-gray-300">
+                      {isPodcast ? (
+                        <pre className="whitespace-pre-wrap">{`[INTRO - 30 sec]
+Host 1: "Welcome to [Podcast Name]! I'm [Name]..."
+Host 2: "And I'm [Name]. Today we're talking about..."
+[Sound effect / Music]
+
+[SEGMENT 1 - 1 min]
+Host 1: "So, what exactly is [topic]?"
+Host 2: "Well, according to our research..."
+
+[SEGMENT 2 - 1 min]  
+Host 1: "Why should we care about this?"
+Host 2: "Because..."
+
+[SEGMENT 3 - 1 min]
+Host 1: "What can we do about it?"
+Host 2: "There are several things..."
+
+[OUTRO - 30 sec]
+Host 1: "Thanks for listening!"
+Host 2: "Don't forget to..."
+[Closing music]`}</pre>
+                      ) : (
+                        <pre className="whitespace-pre-wrap">{`[SCENE 1 - INTRO - 30 sec]
+Location: [Where?]
+Visual: [What do viewers see?]
+Speaker: "Hi everyone! Welcome to..."
+
+[SCENE 2 - THE PROBLEM - 1 min]
+Location: [Where?]
+Visual: [Images/Graphics to show?]
+Speaker: "Today we're discussing..."
+
+[SCENE 3 - THE FACTS - 1 min]
+Location: [Where?]  
+Visual: [Charts? Photos? Interviews?]
+Speaker: "According to..."
+
+[SCENE 4 - SOLUTIONS - 1 min]
+Location: [Where?]
+Visual: [What do viewers see?]
+Speaker: "Here's what we can do..."
+
+[SCENE 5 - OUTRO - 30 sec]
+Location: [Where?]
+Visual: [Final shot]
+Speaker: "Thanks for watching..."
+[End screen / Subscribe reminder]`}</pre>
+                      )}
                     </div>
+                  </div>
+
+                  <div className="space-y-6">
                     <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📄 Script / Screenplay</label>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📄 Your Script (First Draft)</label>
                       <textarea
                         value={group.day4?.draft_script || ""}
                         onChange={(e) => updateDay(4, 'draft_script', e.target.value)}
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[300px] font-mono text-sm"
-                        placeholder="[INTRO]&#10;Hello, welcome to...&#10;&#10;[DEVELOPMENT]&#10;Today we're going to talk about...&#10;&#10;[CLOSING]&#10;Thank you for listening/watching..."
+                        placeholder="Write your full script following the template above..."
                         data-testid="day4-script"
+                      />
+                    </div>
+
+                    <div className="bg-purple-50 border-2 border-black p-4">
+                      <h3 className="font-bold text-sm uppercase mb-2">🎨 Visual Plan / Storyboard</h3>
+                      <p className="text-xs text-gray-600">Describe what your {projectLabel} will look like. What will the audience see/hear?</p>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">🖼️ Visual Description / Sketch</label>
+                      <textarea
+                        value={group.day4?.visual_sketch || ""}
+                        onChange={(e) => updateDay(4, 'visual_sketch', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[150px]"
+                        placeholder={isPodcast ? 
+                          "Describe: Background music? Sound effects? Who speaks when? Tone of voice?" :
+                          "Describe each scene: Location? Camera angles? Graphics? Text on screen? Transitions?"
+                        }
+                        data-testid="day4-visual"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">⏱️ Estimated Duration</label>
+                      <div className="bg-green-50 border-2 border-black p-3 mb-2">
+                        <p className="text-sm font-medium">⚠️ Minimum: 3 minutes | Maximum: 5 minutes</p>
+                      </div>
+                      <input
+                        type="text"
+                        value={group.day4?.estimated_duration || ""}
+                        onChange={(e) => updateDay(4, 'estimated_duration', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                        placeholder="e.g., 3 minutes 30 seconds"
+                        data-testid="day4-duration"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Day 5 */}
+              {/* Day 5 - Production */}
               {activeDay === 5 && (
                 <div data-testid="day-5-form">
                   <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
-                    {isPodcast ? <Mic className="w-6 h-6 text-[#A3E635]" /> : <Video className="w-6 h-6 text-[#A3E635]" />}
-                    Day 5: Final Version
+                    <Play className="w-6 h-6 text-[#10B981]" />
+                    Day 5: Rehearsal, Recording & Submission
                   </h2>
-                  <div className="space-y-6">
-                    <div className="bg-green-100 border-2 border-black p-4 mb-4">
-                      <p className="font-bold text-sm">🎉 Last step! Review and improve your script.</p>
+                  
+                  {/* Production Tools */}
+                  <div className="bg-green-50 border-2 border-black p-4 mb-6">
+                    <h3 className="font-bold text-sm uppercase mb-2">🛠️ Recommended Tools</h3>
+                    <div className="grid md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="font-bold mb-1">📻 For Podcast:</p>
+                        <ul className="text-xs space-y-1 text-gray-700">
+                          <li>• Audacity (free audio editor)</li>
+                          <li>• Anchor.fm (free recording)</li>
+                          <li>• Phone voice recorder</li>
+                          <li>• GarageBand (Mac/iOS)</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold mb-1">🎬 For Video Log:</p>
+                        <ul className="text-xs space-y-1 text-gray-700">
+                          <li>• CapCut (free video editor)</li>
+                          <li>• iMovie (Mac/iOS)</li>
+                          <li>• Canva Video</li>
+                          <li>• Phone camera</li>
+                        </ul>
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="space-y-6">
                     <div>
-                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📄 Final Script</label>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">🎭 Rehearsal Notes</label>
+                      <textarea
+                        value={group.day5?.rehearsal_notes || ""}
+                        onChange={(e) => updateDay(5, 'rehearsal_notes', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="What did you practice? What needs improvement? Timing issues?"
+                        data-testid="day5-rehearsal"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">🛠️ Tools You Used</label>
+                      <textarea
+                        value={group.day5?.production_tools || ""}
+                        onChange={(e) => updateDay(5, 'production_tools', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[80px]"
+                        placeholder="What apps/tools did you use to record and edit?"
+                        data-testid="day5-tools"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📅 Recording Date</label>
+                      <input
+                        type="text"
+                        value={group.day5?.recording_date || ""}
+                        onChange={(e) => updateDay(5, 'recording_date', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                        placeholder="When did you record? (e.g., January 15, 2026)"
+                        data-testid="day5-date"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📄 Final Script (Revised)</label>
                       <textarea
                         value={group.day5?.final_script || ""}
                         onChange={(e) => updateDay(5, 'final_script', e.target.value)}
-                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[300px] font-mono text-sm"
-                        placeholder="Your final reviewed and corrected script..."
-                        data-testid="day5-script"
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[200px] font-mono text-sm"
+                        placeholder="Paste your final, corrected script here..."
+                        data-testid="day5-final-script"
                       />
                     </div>
+
+                    <div className="bg-[#A3E635] border-2 border-black p-4">
+                      <h3 className="font-bold text-sm uppercase mb-2">🎉 Submit Your {projectLabel}!</h3>
+                      <p className="text-xs mb-3">Upload to YouTube, Google Drive, or any platform and paste the link below.</p>
+                    </div>
+
                     <div>
                       <label className="text-sm font-bold uppercase tracking-widest block mb-2">🔗 Link to Your {projectLabel}</label>
                       <input
@@ -594,6 +802,78 @@ const ProjectPage = () => {
                         className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                         placeholder="https://youtube.com/... or https://drive.google.com/..."
                         data-testid="day5-link"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Day 6 - Reflection */}
+              {activeDay === 6 && (
+                <div data-testid="day-6-form">
+                  <h2 className="text-2xl font-bold uppercase mb-6 flex items-center gap-2">
+                    <RefreshCw className="w-6 h-6 text-[#A3E635]" />
+                    Day 6: Reflection
+                  </h2>
+                  
+                  <div className="bg-purple-50 border-2 border-black p-4 mb-6">
+                    <h3 className="font-bold text-sm uppercase mb-2">🪞 Time to Reflect!</h3>
+                    <p className="text-xs text-gray-600">Think about your experience creating this project. Be honest and thoughtful.</p>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">📚 What Did You Learn?</label>
+                      <textarea
+                        value={group.day6?.what_learned || ""}
+                        onChange={(e) => updateDay(6, 'what_learned', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="What new things did you learn about the topic? About creating a podcast/video? About English?"
+                        data-testid="day6-learned"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">⚡ Challenges You Faced</label>
+                      <textarea
+                        value={group.day6?.challenges_faced || ""}
+                        onChange={(e) => updateDay(6, 'challenges_faced', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="What was difficult? How did you solve the problems?"
+                        data-testid="day6-challenges"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">👥 Team Collaboration</label>
+                      <textarea
+                        value={group.day6?.team_collaboration || ""}
+                        onChange={(e) => updateDay(6, 'team_collaboration', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="How did you work as a team? Who did what? How did you communicate?"
+                        data-testid="day6-team"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">🔄 What Would You Change?</label>
+                      <textarea
+                        value={group.day6?.what_would_change || ""}
+                        onChange={(e) => updateDay(6, 'what_would_change', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="If you could do this project again, what would you do differently?"
+                        data-testid="day6-change"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-bold uppercase tracking-widest block mb-2">⭐ Overall Experience</label>
+                      <textarea
+                        value={group.day6?.overall_experience || ""}
+                        onChange={(e) => updateDay(6, 'overall_experience', e.target.value)}
+                        className="w-full border-2 border-black bg-white p-3 focus:ring-2 focus:ring-[#A3E635] outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-h-[100px]"
+                        placeholder="How was the experience? Did you enjoy it? Would you recommend this project?"
+                        data-testid="day6-experience"
                       />
                     </div>
                   </div>
@@ -737,7 +1017,7 @@ const TeacherDashboard = () => {
               ) : (
                 <div className="space-y-2">
                   {groups.map(g => {
-                    const completed = [g.day1?.completed, g.day2?.completed, g.day3?.completed, g.day4?.completed, g.day5?.completed].filter(Boolean).length;
+                    const completed = [g.day1?.completed, g.day2?.completed, g.day3?.completed, g.day4?.completed, g.day5?.completed, g.day6?.completed].filter(Boolean).length;
                     const isPodcast = g.project_type === 'podcast' || !g.project_type;
                     return (
                       <div
@@ -757,7 +1037,7 @@ const TeacherDashboard = () => {
                             </div>
                           </div>
                           <div className={`px-2 py-1 text-xs font-bold border-2 ${selectedGroup?.id === g.id ? 'border-white' : 'border-black bg-[#A3E635]'}`}>
-                            {completed}/5
+                            {completed}/6
                           </div>
                         </div>
                       </div>
@@ -771,8 +1051,8 @@ const TeacherDashboard = () => {
           {/* Group Details */}
           <div className="lg:col-span-2">
             {selectedGroup ? (
-              <div className="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6">
-                <div className="flex justify-between items-start mb-6">
+              <div className="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 max-h-[80vh] overflow-y-auto">
+                <div className="flex justify-between items-start mb-6 sticky top-0 bg-white pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-3">
                     {(selectedGroup.project_type === 'podcast' || !selectedGroup.project_type) ? 
                       <Mic className="w-6 h-6 text-[#8B5CF6]" /> : 
@@ -797,10 +1077,10 @@ const TeacherDashboard = () => {
 
                 {/* Day Responses */}
                 <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map(day => {
+                  {[1, 2, 3, 4, 5, 6].map(day => {
                     const dayData = selectedGroup[`day${day}`];
                     const isComplete = dayData?.completed;
-                    const titles = ["Planning", "Research", "Structure", "Draft", "Final"];
+                    const titles = ["Planning", "Research", "Language & Structure", "Script & Visual", "Production", "Reflection"];
                     
                     return (
                       <div key={day} className={`border-2 border-black p-4 ${isComplete ? 'bg-green-50' : 'bg-gray-50'}`}>
@@ -814,7 +1094,7 @@ const TeacherDashboard = () => {
                             <p><strong>Topic:</strong> {dayData.topic || "-"}</p>
                             <p><strong>Alternatives:</strong> {dayData.alternative_topics || "-"}</p>
                             <p><strong>Why:</strong> {dayData.why_this_topic || "-"}</p>
-                            <p><strong>Communicate:</strong> {dayData.what_to_communicate || "-"}</p>
+                            <p><strong>Message:</strong> {dayData.what_to_communicate || "-"}</p>
                           </div>
                         )}
                         {day === 2 && dayData && (
@@ -826,26 +1106,47 @@ const TeacherDashboard = () => {
                         )}
                         {day === 3 && dayData && (
                           <div className="text-sm space-y-2">
-                            <p><strong>Part 1:</strong> {dayData.part1 || "-"}</p>
-                            <p><strong>Part 2:</strong> {dayData.part2 || "-"}</p>
-                            <p><strong>Part 3:</strong> {dayData.part3 || "-"}</p>
-                            <p><strong>Language:</strong> {dayData.language_style || "-"}</p>
+                            <p><strong>Grammar Used:</strong> {[
+                              dayData.grammar_present_perfect && "Present Perfect",
+                              dayData.grammar_comparatives && "Comparatives",
+                              dayData.grammar_connectors && "Connectors",
+                              dayData.grammar_passive_voice && "Passive Voice"
+                            ].filter(Boolean).join(", ") || "-"}</p>
+                            <p><strong>Introduction:</strong> {dayData.introduction || "-"}</p>
+                            <p><strong>Development:</strong> {dayData.development || "-"}</p>
+                            <p><strong>Conclusion:</strong> {dayData.conclusion || "-"}</p>
                             <p><strong>Vocabulary:</strong> {dayData.key_vocabulary || "-"}</p>
+                            <p><strong>Definitions:</strong> {dayData.vocabulary_definitions || "-"}</p>
+                            <p><strong>Style:</strong> {dayData.language_style || "-"}</p>
                           </div>
                         )}
                         {day === 4 && dayData && (
-                          <div className="text-sm">
-                            <p><strong>Draft:</strong></p>
-                            <pre className="bg-white border border-gray-300 p-2 mt-1 whitespace-pre-wrap text-xs max-h-40 overflow-y-auto">{dayData.draft_script || "-"}</pre>
+                          <div className="text-sm space-y-2">
+                            <p><strong>Script:</strong></p>
+                            <pre className="bg-white border border-gray-300 p-2 whitespace-pre-wrap text-xs max-h-40 overflow-y-auto">{dayData.draft_script || "-"}</pre>
+                            <p><strong>Visual Plan:</strong> {dayData.visual_sketch || "-"}</p>
+                            <p><strong>Duration:</strong> {dayData.estimated_duration || "-"}</p>
                           </div>
                         )}
                         {day === 5 && dayData && (
                           <div className="text-sm space-y-2">
+                            <p><strong>Rehearsal Notes:</strong> {dayData.rehearsal_notes || "-"}</p>
+                            <p><strong>Tools Used:</strong> {dayData.production_tools || "-"}</p>
+                            <p><strong>Recording Date:</strong> {dayData.recording_date || "-"}</p>
                             <p><strong>Final Script:</strong></p>
                             <pre className="bg-white border border-gray-300 p-2 whitespace-pre-wrap text-xs max-h-40 overflow-y-auto">{dayData.final_script || "-"}</pre>
                             {dayData.media_link && (
                               <p><strong>Link:</strong> <a href={dayData.media_link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{dayData.media_link}</a></p>
                             )}
+                          </div>
+                        )}
+                        {day === 6 && dayData && (
+                          <div className="text-sm space-y-2">
+                            <p><strong>What Learned:</strong> {dayData.what_learned || "-"}</p>
+                            <p><strong>Challenges:</strong> {dayData.challenges_faced || "-"}</p>
+                            <p><strong>Team Work:</strong> {dayData.team_collaboration || "-"}</p>
+                            <p><strong>Would Change:</strong> {dayData.what_would_change || "-"}</p>
+                            <p><strong>Experience:</strong> {dayData.overall_experience || "-"}</p>
                           </div>
                         )}
                       </div>
