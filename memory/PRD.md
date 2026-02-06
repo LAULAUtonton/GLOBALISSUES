@@ -50,14 +50,15 @@ Create an online journal project for podcast/video log students project for 3rd 
 - Fonts: Outfit (headings), Manrope (body)
 - Mobile-responsive
 
-## Day Workflow Structure
+## Day Workflow Structure (6 Days)
 | Day | Title | Fields |
 |-----|-------|--------|
 | 1 | Planning | Topic, Alternatives, Why this topic, What to communicate |
 | 2 | Research | Sources, Learnings, Target audience |
-| 3 | Structure | Introduction, Development, Conclusion, Language style, Key vocabulary |
-| 4 | Draft | First script/screenplay |
-| 5 | Final | Final script, Media link |
+| 3 | Language & Structure | **Grammar Checklist** (Present Perfect, Comparatives, Connectors, Passive Voice), Introduction, Development, Conclusion, **Key Vocabulary (min 10 words)**, Definitions, Language style |
+| 4 | Script & Visual | **Script Template** (Podcast/Vlog examples), Draft script, **Visual sketch/storyboard**, Estimated duration (3-5 min) |
+| 5 | Production | **Rehearsal notes**, **Production tools used**, Recording date, Final script, Media link |
+| 6 | Reflection | What learned, Challenges faced, Team collaboration, What would change, Overall experience |
 
 ## Prioritized Backlog
 
