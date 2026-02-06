@@ -150,7 +150,7 @@ async def update_day(group_id: str, request: DayUpdateRequest):
         {"$set": update_data}
     )
     
-    return {"message": "Actualizado correctamente", "day": request.day}
+    return {"message": "Updated successfully", "day": request.day}
 
 @api_router.delete("/groups/{group_id}")
 async def delete_group(group_id: str):
