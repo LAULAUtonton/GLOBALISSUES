@@ -40,20 +40,48 @@ class Day2Data(BaseModel):
     completed: bool = False
 
 class Day3Data(BaseModel):
-    part1: str = ""
-    part2: str = ""
-    part3: str = ""
-    language_style: str = ""
+    # Message Structure
+    introduction: str = ""
+    development: str = ""
+    conclusion: str = ""
+    # Grammar Checklist (Unit 3)
+    grammar_present_perfect: bool = False
+    grammar_comparatives: bool = False
+    grammar_connectors: bool = False
+    grammar_passive_voice: bool = False
+    # Vocabulary
     key_vocabulary: str = ""
+    vocabulary_definitions: str = ""
+    # Language Style
+    language_style: str = ""
     completed: bool = False
 
 class Day4Data(BaseModel):
+    # Script
     draft_script: str = ""
+    # Visual Description
+    visual_sketch: str = ""
+    # Timing
+    estimated_duration: str = ""
     completed: bool = False
 
 class Day5Data(BaseModel):
+    # Production
+    rehearsal_notes: str = ""
+    production_tools: str = ""
+    recording_date: str = ""
+    # Final submission
     final_script: str = ""
     media_link: str = ""
+    completed: bool = False
+
+class Day6Data(BaseModel):
+    # Reflection
+    what_learned: str = ""
+    challenges_faced: str = ""
+    team_collaboration: str = ""
+    what_would_change: str = ""
+    overall_experience: str = ""
     completed: bool = False
 
 class GroupProject(BaseModel):
